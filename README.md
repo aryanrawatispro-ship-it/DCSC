@@ -72,6 +72,24 @@ The web interface includes:
 - **Results Viewer** - Preview and download your data
 - **Recent Jobs** - Quick access to previous scrapes
 
+## VPS Deployment
+
+**Want to deploy on your Ubuntu VPS?** We've got you covered!
+
+See **[DEPLOYMENT.md](DEPLOYMENT.md)** for complete VPS deployment instructions including:
+- Automated installation script
+- Systemd service setup
+- Nginx reverse proxy configuration
+- SSL/HTTPS setup with Let's Encrypt
+- Security best practices
+
+**Quick VPS Install:**
+```bash
+cd DCSC/deployment
+chmod +x install_vps.sh
+./install_vps.sh
+```
+
 ## Installation
 
 ### Prerequisites

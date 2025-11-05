@@ -1,0 +1,23 @@
+[Unit]
+Description=Discord Data Scraper Web Interface
+After=network.target
+
+[Service]
+Type=simple
+User=YOUR_USERNAME
+WorkingDirectory=/home/YOUR_USERNAME/DCSC
+Environment="PATH=/home/YOUR_USERNAME/DCSC/venv/bin"
+ExecStart=/home/YOUR_USERNAME/DCSC/venv/bin/python app.py
+Restart=always
+RestartSec=10
+
+# Logging
+StandardOutput=append:/home/YOUR_USERNAME/DCSC/scraper.log
+StandardError=append:/home/YOUR_USERNAME/DCSC/scraper.error.log
+
+# Security
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
