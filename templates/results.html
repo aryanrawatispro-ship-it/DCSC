@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Results - Discord Data Scraper</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-primary">
+        <div class="container-fluid">
+            <span class="navbar-brand mb-0 h1">
+                <i class="bi bi-discord"></i> Discord Data Scraper - Results
+            </span>
+            <a href="/" class="btn btn-light btn-sm">
+                <i class="bi bi-arrow-left"></i> Back to Home
+            </a>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-12">
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="bi bi-file-earmark-text"></i> Scraping Results</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="resultsContent">
+                            <div class="text-center">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                                <p class="mt-3">Loading results...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Get job ID from URL parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const jobId = urlParams.get('job');
+
+        if (jobId) {
+            // Fetch results
+            fetch(`/api/view/${jobId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        showError(data.error);
+                    } else {
+                        displayResults(data);
+                    }
+                })
+                .catch(error => {
+                    showError('Failed to load results: ' + error.message);
+                });
+        } else {
+            showError('No job ID specified');
+        }
+
+        function displayResults(data) {
+            const resultsDiv = document.getElementById('resultsContent');
+
+            let html = `
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle"></i>
+                    <strong>Total Items:</strong> ${data.total}
+                    ${data.total > data.preview_count ? `(Showing first ${data.preview_count} items)` : ''}
+                </div>
+
+                <div class="mb-3">
+                    <button class="btn btn-primary" onclick="downloadResults()">
+                        <i class="bi bi-download"></i> Download Full Results (JSON)
+                    </button>
+                </div>
+
+                <div class="accordion" id="resultsAccordion">
+            `;
+
+            data.results.forEach((item, index) => {
+                const itemId = `item-${index}`;
+                html += `
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button ${index > 0 ? 'collapsed' : ''}"
+                                    type="button"
+                                    data-bs-toggle="collapse"
+                                    data-bs-target="#${itemId}">
+                                Item #${index + 1} - ${getItemTitle(item)}
+                            </button>
+                        </h2>
+                        <div id="${itemId}"
+                             class="accordion-collapse collapse ${index === 0 ? 'show' : ''}"
+                             data-bs-parent="#resultsAccordion">
+                            <div class="accordion-body">
+                                <pre class="bg-dark text-light p-3 rounded">${JSON.stringify(item, null, 2)}</pre>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += '</div>';
+            resultsDiv.innerHTML = html;
+        }
+
+        function getItemTitle(item) {
+            if (item.content) {
+                // Message
+                const preview = item.content.substring(0, 50);
+                return `Message by ${item.author?.username || 'Unknown'}: ${preview}${item.content.length > 50 ? '...' : ''}`;
+            } else if (item.user) {
+                // Member
+                return `Member: ${item.user.username}#${item.user.discriminator}`;
+            }
+            return 'Item';
+        }
+
+        function showError(message) {
+            const resultsDiv = document.getElementById('resultsContent');
+            resultsDiv.innerHTML = `
+                <div class="alert alert-danger">
+                    <i class="bi bi-exclamation-triangle"></i>
+                    <strong>Error:</strong> ${message}
+                </div>
+                <a href="/" class="btn btn-primary">Go Back</a>
+            `;
+        }
+
+        function downloadResults() {
+            window.location.href = `/api/download/${jobId}`;
+        }
+    </script>
+</body>
+</html>

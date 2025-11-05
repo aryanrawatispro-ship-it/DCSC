@@ -16,6 +16,62 @@ A powerful Discord data scraper similar to [Apify's curious_coder/discord-data-s
 
 🎨 **Beautiful CLI** - Colorful terminal interface with progress tracking
 
+🌐 **Web Interface** - Beautiful web GUI similar to Apify with real-time progress tracking
+
+## Web Interface (NEW!)
+
+The Discord Data Scraper now includes a **beautiful web-based GUI** similar to Apify's interface!
+
+### Features
+- 🎨 Modern, responsive web interface
+- ⚙️ Easy configuration with forms
+- ⏱️ Real-time progress tracking with Socket.IO
+- 📊 Live log output
+- 💾 Download results as JSON
+- 👁️ Preview results in browser
+- 🔧 Full customization options:
+  - Token input
+  - No timeout option
+  - Configurable delays
+  - Message limits
+  - Before/After message ID filters
+
+### Quick Start (Web Interface)
+
+1. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+2. Start the web server:
+```bash
+python app.py
+```
+
+3. Open your browser and navigate to:
+```
+http://localhost:5000
+```
+
+4. Fill in the form:
+   - Enter your Discord token (click "How to get your Discord token?" for help)
+   - Select action (Scrape Messages or Scrape Members)
+   - Enter channel URL
+   - Configure advanced options if needed
+   - Click "Start Scraping"
+
+5. Watch real-time progress and download results!
+
+### Web Interface Screenshots
+
+The web interface includes:
+- **Configuration Form** - Easy input with validation
+- **Advanced Options** - Collapsible section for fine-tuning
+- **Real-time Progress** - Live updates with Socket.IO
+- **Log Output** - See what's happening in real-time
+- **Results Viewer** - Preview and download your data
+- **Recent Jobs** - Quick access to previous scrapes
+
 ## Installation
 
 ### Prerequisites
@@ -61,7 +117,11 @@ python main.py --get-token
 
 ## Usage
 
-### Quick Start
+You can use the Discord Data Scraper in two ways:
+1. **Web Interface** (Recommended) - Beautiful GUI similar to Apify
+2. **Command Line** - Terminal-based interface for automation
+
+### Quick Start (Command Line)
 
 #### Scrape Messages from a Channel
 
@@ -246,9 +306,13 @@ Scraped members are saved as JSON with the following structure:
 | Resume Capability | ✅ | ✅ |
 | Configurable Delays | ✅ | ✅ |
 | JSON Output | ✅ | ✅ |
+| Web Interface | ✅ | ✅ |
+| Real-time Progress | ✅ | ✅ |
 | CLI Interface | ✅ | ❌ |
+| No Timeout Option | ✅ | ❓ |
 | Free to Use | ✅ | ❌ ($19/month) |
 | Open Source | ✅ | ❌ |
+| Local Execution | ✅ | ❌ |
 
 ## Examples
 
